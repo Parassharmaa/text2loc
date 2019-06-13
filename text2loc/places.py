@@ -11,9 +11,10 @@ and relationships between places (city is inside region is inside country, etc)
 """
 class PlaceContext(object):
     def __init__(self, place_names, db_file=None):
-        db_file = db_file or os.path.dirname(os.path.realpath(__file__)) + "/locs.db"
+        path = "/tmp/locs.db"
+        print(path)
+        db_file = db_file or path
         self.conn = sqlite3.connect(db_file)
-        self.conn.text_factory = lambda x: unicode(x, 'utf-8', 'ignore')
         self.places = place_names
 
 
@@ -23,7 +24,7 @@ class PlaceContext(object):
 
         cur.execute("CREATE TABLE cities(geoname_id INTEGER, continent_code TEXT, continent_name TEXT, country_iso_code TEXT, country_name TEXT, subdivision_iso_code TEXT, subdivision_name TEXT, city_name TEXT, metro_code TEXT, time_zone TEXT)")
         cur_dir = os.path.dirname(os.path.realpath(__file__))
-        with open(cur_dir+"/data/GeoLite2-City-Locations.csv", "rb") as info:
+        with open(cur_dir+"/data/GeoLite2-City-Locations.csv", "r") as info:
             reader = csv.reader(info)
             for row in reader:
                 cur.execute("INSERT INTO cities VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);", row)
@@ -47,7 +48,7 @@ class PlaceContext(object):
 
     def correct_country_mispelling(self, s):
         cur_dir = os.path.dirname(os.path.realpath(__file__))
-        with open(cur_dir+"/data/ISO3166ErrorDictionary.csv", "rb") as info:
+        with open(cur_dir+"/data/ISO3166ErrorDictionary.csv", "r") as info:
             reader = csv.reader(info)
             for row in reader:
                 if s in remove_non_ascii(row[0]):
@@ -61,7 +62,7 @@ class PlaceContext(object):
         try:
             pycountry.countries.get(name=s)
             return True
-        except KeyError, e:
+        except KeyError:
             return False
 
     
@@ -157,7 +158,7 @@ class PlaceContext(object):
             try:
                 country = pycountry.countries.get(alpha2=row[3])
                 country_name = country.name
-            except KeyError, e:
+            except KeyError:
                 country_name = row[4]
 
             city_name = row[7]

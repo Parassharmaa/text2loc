@@ -5,3 +5,4 @@ geograpy/locs.db
 /dist/
 /*.egg-info
 /*.egg
+build/

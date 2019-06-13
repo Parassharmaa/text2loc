@@ -2,30 +2,24 @@ from setuptools import setup
 import os
 
 try:
-   import pypandoc
-   long_description = pypandoc.convert('README.md', 'rst')
+    import pypandoc
+    long_description = pypandoc.convert('README.md', 'rst')
 except (IOError, ImportError):
-   long_description = open('README.md').read()
+    long_description = open('README.md').read()
 
-setup(name='geograpy',
-      version='0.3.7',
-      description='Extract countries, regions and cities from a URL or text',
+setup(name='text2loc',
+      version='0.0.3',
+      description='Extract countries, regions and cities from text',
       long_description=long_description,
-      url='https://github.com/ushahidi/geograpy',
-      download_url ='https://github.com/ushahidi/geograpy/tarball/0.3.4',
-      author='Jonathon Morgan',
-      author_email='jonathon@ushahidi.com',
+      author='Paras Sharma',
+      author_email='',
       license='MIT',
-      packages=['geograpy'],
+      packages=['text2loc'],
       install_requires=[
-            'numpy',
-            'nltk',
-            'newspaper',
-            'jellyfish',
-            'pycountry'
+          'numpy', 'nltk', 'newspaper3k', 'jellyfish', 'pycountry'
       ],
-      scripts=['geograpy/bin/geograpy-nltk'],
-      package_data = {
-            'geograpy': ['data/*.csv'],
+      scripts=['text2loc/bin/geograpy-nltk'],
+      package_data={
+          'text2loc': ['data/*.csv'],
       },
       zip_safe=False)
